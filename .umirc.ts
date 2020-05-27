@@ -1,10 +1,10 @@
 import { defineConfig } from 'dumi';
 
 export default {
-  ssr: {
-    devServerRender: true,
-    mode: 'stream', // 流式渲染
-  },
+  // ssr: {
+  //   devServerRender: true,
+  //   mode: 'stream', // 流式渲染
+  // },
   // exportStatic: {}, // 预渲染
   ...defineConfig({
     mode: 'site',
