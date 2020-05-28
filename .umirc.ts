@@ -9,7 +9,7 @@ export default {
   ...defineConfig({
     mode: 'site',
     title: 'JohnApache',
-    description: 'JohnApache',
+    // description: 'JohnApache',
     // logo: '',
     locales: [], // 不需要多语言
     // menus: {}, // 约定式 侧边导航
