@@ -18,7 +18,3 @@ features:
     desc: 收集其他内容有趣的话题
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
-
-# 前言
-
-> 人就是这样， 宁愿吃生活的苦，也不愿吃学习的苦，当你随着年纪的增长， 一无所成时才会发现， 只有知识才能充盈你的世界，不间断的学习才能给自己安全感，无论海角天涯，只此心安及是家。

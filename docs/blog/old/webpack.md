@@ -1,4 +1,4 @@
-# Webpack 教程
+# Webpack 配置详解
 
 > 全文基于 webpack **v4.41.0**版本
 
@@ -325,13 +325,14 @@ npx webpack
   }
   ```
   > webpack-dev-server 编译后不写入任何输出文件。相反，它将捆绑文件保存在内存中，并像在服务器根路径上挂载的真实文件一样提供它们。如果您的页面希望在其他路径上找到捆绑文件，则可以使用**publicPath**开发服务器的配置中的选项进行更改。
-  启动 weback-dev-server, 会自动打开浏览器 并实时刷新
+  > 启动 weback-dev-server, 会自动打开浏览器 并实时刷新
   ```shell
   webpack-dev-server --open
   ```
 - 使用 webpack-dev-middleware
   webpack-dev-middleware 是一个包装程序，它将由 webpack 处理的文件发送到服务器。它在 webpack-dev-server 内部使用，但是如果需要，它可以作为单独的软件包使用，以允许进行更多自定义设置
   koa 使用实例
+
   ```js
   import Koa from 'koa';
   import webpack from 'webpack';
@@ -446,10 +447,10 @@ npx webpack
     在闲置时获取资源
   - preload: 这种“资源提示” 告诉浏览器这是一种在这次导航中必须的资源，只是会在之后才会被使用， chrome 甚至会在资源加载后 3 秒没有被使用时打印一个警告， 浏览器通常以中等优先级（非布局阻塞）获取此资源。
     正常获取，及早发现
-  Preload 用于更早地发现资源并避免发起类似瀑布一样的请求。 它可以将页面加载降低到 2 次往返（1. HTML，2。所有其他资源）。 使用它不会花费额外的带宽。
-  prefetch 用于使用浏览器的空闲时间来加速将来的导航。 当用户未执行预期的未来导航时，使用它可能会花费额外的带宽。
-  具体文档可以[查看这里](https://www.zcfy.cc/article/link-rel-prefetch-preload-in-webpack)
-  prefetch 实例
+    Preload 用于更早地发现资源并避免发起类似瀑布一样的请求。 它可以将页面加载降低到 2 次往返（1. HTML，2。所有其他资源）。 使用它不会花费额外的带宽。
+    prefetch 用于使用浏览器的空闲时间来加速将来的导航。 当用户未执行预期的未来导航时，使用它可能会花费额外的带宽。
+    具体文档可以[查看这里](https://www.zcfy.cc/article/link-rel-prefetch-preload-in-webpack)
+    prefetch 实例
   ```js
   import(/* webpackPrefetch: true */ 'LoginModal');
   ```
@@ -758,7 +759,7 @@ npx webpack
   ```
   如同上面提到的，如果所有代码都不包含副作用，我们就可以简单地将该属性标记为 false，来告知 webpack，它可以安全地删除未用到的 export 导出。
   > 「副作用」的定义是，在导入时会执行特殊行为的代码，而不是仅仅暴露一个 export 或多个 export。举例说明，例如 polyfill，它影响全局作用域，并且通常不提供 export
-  如果你的代码确实有一些副作用，那么可以改为提供一个数组：
+  > 如果你的代码确实有一些副作用，那么可以改为提供一个数组：
   ```json
   {
     "name": "your-project",

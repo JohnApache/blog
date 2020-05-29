@@ -1,4 +1,10 @@
-# Babel 教程
+---
+group:
+  title: 旧文档迁移
+  order: 5
+---
+
+# Babel 配置详解
 
 ## 前言
 
