@@ -70,8 +70,8 @@ markdown 支持的语言:`1c, abnf, accesslog, actionscript, ada, apache, apples
 
   效果：
 
-  标题 1
-  ======
+  # 标题 1
+
   标题 2
 
   ***
@@ -407,19 +407,23 @@ ID|昵称|性别
   效果：  
    质能守恒方程可以用一个很简洁的方程式 $E=mc^2$ 来表达。
 
-- $$
-    示例：
-    ```
-  $$
+- \$\$ 表示整行公式：  
+   示例：
 
+  ```
+  $$\sum_{i=1}^n a_i=0$$
   $$f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
   $$\sum^{j-1}_{k=0}{\widehat{\gamma}_{kj} z_k}$$
 
   ```
+
   效果：
   $$\sum_{i=1}^n a_i=0$$
   $$f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
   $$\sum^{j-1}_{k=0}{\widehat{\gamma}_{kj} z_k}$$
+
+  ```
+
   ```
 
 ## 扩展
