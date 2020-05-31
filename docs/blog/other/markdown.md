@@ -1,3 +1,9 @@
+---
+group:
+  title: 工具
+  order: 6
+---
+
 # Markdown 语法介绍
 
 Markdown 是一种纯文本格式的标记语言。通过简单的标记语法，它可以使普通文本内容具有一定的格式。本博客使用的也是 Makrdown 编写的，所以统一整理了下语法。
@@ -21,7 +27,7 @@ markdown 支持的语言:`1c, abnf, accesslog, actionscript, ada, apache, apples
     console.log('Hello Markdown')
 </pre>
 
-不需要代码高亮的时候可以 使用 ` ```noohighlight ` 语法禁用高亮
+不需要代码高亮的时候可以 使用 ` ```nohighlight ` 语法禁用高亮
 
 <pre>
 ```nohighlight
@@ -222,7 +228,7 @@ ee
     那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。
     软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！
 
-        那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。
+    那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。
 
     寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。
     但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！
@@ -424,12 +430,36 @@ ID|昵称|性别
 
   $$\sum^{j-1}_{k=0}{\widehat{\gamma}_{kj} z_k}$$
 
+## TodoList
+
+> 有的平台不支持，
+> 示例：
+
+```
+- [ ] Eat
+- [x] Code
+  - [x] HTML
+  - [x] CSS
+  - [x] JavaScript
+- [ ] Sleep
+```
+
+效果：
+
+- [ ] Eat
+- [x] Code
+  - [x] HTML
+  - [x] CSS
+  - [x] JavaScript
+- [ ] Sleep
+
 ## 扩展
 
 支持 jsfiddle、gist、runjs、优酷视频，直接填写 url，在其之后会自动添加预览点击会展开相关内容。
 
-> 有的平台不支持，
-> 示例：
+> 有的平台不支持
+
+示例：
 
 ```
 http://{url_of_the_fiddle}/embedded/[{tabs}/[{style}]]/
@@ -438,6 +468,8 @@ http://runjs.cn/detail/{id}
 http://v.youku.com/v_show/id_{video_id}.html
 ```
 
-## 流程图
+示例：
+
+https://v.youku.com/v_show/id_XNDY5MjU1Mzk0OA==.html
 
 > 大多数不支持
