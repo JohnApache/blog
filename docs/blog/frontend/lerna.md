@@ -345,7 +345,7 @@ Lerna 允许两种方式来管理所有包的版本控制
 
   - `--canary`： 当使用此标志运行时，lerna publish 以更细粒度的方式发布包。在发布到 npm 之前，它通过获取当前版本、将其转发到下一个次要版本、添加提供的元后缀（默认为 alpha）并附加当前 git sha（例如：1.0.0 变为 1.1.0-alpha.0+81e3b443）来创建新的版本标记。
 
-    > Tips: 如果您已从 CI 中的多个活动开发分支发布了 Canary 版本，则建议在每个分支的基础上自定义--preid 和--dist-tag <tag>，以避免版本冲突。
+    > Tips: 如果您已从 CI 中的多个活动开发分支发布了 Canary 版本，则建议在每个分支的基础上自定义--preid 和--dist-tag `<tag>`，以避免版本冲突。
 
     ```bash
     lerna publish --canary
