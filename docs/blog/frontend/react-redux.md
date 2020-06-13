@@ -1,4 +1,4 @@
-# React-Redux 基于 Hooks
+# React-Redux 使用 Hooks
 
 React `v16.8` 正式提供 `Hooks Api`, 来创建 能够管理本地状态的函数组件 , 并能执行 对应副作用的功能。 `React-Redux` 在 `v7.1.0` 也正式提供支持 Hooks Api 来使用 `Redux` 控制数据流。  
 React-Redux 提供了一系列 符合 Hooks 风格的 `use api`，来替代现有 `connect` api。
