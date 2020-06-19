@@ -5,7 +5,8 @@ export default {
   //   devServerRender: true,
   //   mode: 'stream', // 流式渲染
   // },
-  // exportStatic: {}, // 预渲染
+  exportStatic: {}, // 预渲染
+  hash: true,
   ...defineConfig({
     mode: 'site',
     title: 'JohnApache',
