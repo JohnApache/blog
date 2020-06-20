@@ -14,6 +14,7 @@ export default {
     // logo: '',
     locales: [], // 不需要多语言
     // menus: {}, // 约定式 侧边导航
+    favicon: '/favicon.ico',
     navs: [
       null, // null 值代表保留约定式生成的导航，只做增量配置
       {
