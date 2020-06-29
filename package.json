@@ -21,6 +21,8 @@
     ]
   },
   "devDependencies": {
+    "brotli-webpack-plugin": "^1.1.0",
+    "compression-webpack-plugin": "^4.0.0",
     "dumi": "^1.0.8",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
