@@ -67,6 +67,7 @@ program
   ```
   - 当传入的是一个字符串的时候，表示的是命令行参数默认值，flags 提供结尾参数选项的时候 才有效果, 当提供默认值时，即使<>必填参数，也可以不传值
 - 第四个参数是只有当第三个参数是一个处理函数的时候，才有效果， 该参数选项表示的是处理函数的绑定参数，和 flag 命令行参数的传入顺序是 先传入命令行传入的参数 ，然后才是第四个参数的绑定值,如果没有传入命令行传入的参数，第四个参数就直接作为该命令选项的默认值了
+
   ```js
   const program = require('commander');
   program.option(
@@ -210,7 +211,8 @@ commander 提供了 program.command 函数创建子级命令，使用 program.co
 - 使用单独的 可执行文件
   当 command 函数传入第二个参数 description 参数，commander 就会默认认为这是使用单独的可执行文件方式执行子命令。commander 会自动检索当前脚本文件的相对应名称的文件执行子命令.
   `js // ./lib/pm.js const program = require('commander'); program .command('install <name>', 'this is a git style command') program.parse(program.argv);`
-  ```js
+
+  ````js
   // ./lib/pm-install.js
   const program = require('commander');
   program.parse(program.argv);
@@ -255,6 +257,7 @@ commander 提供了 program.command 函数创建子级命令，使用 program.co
       - 如果没有配置executableFile 选项，当执行单独的可执行文件默认的搜索文件规则是，当前文件名，加上command名，在当前脚本文件中搜索。例如当前脚本文件是 index.js ,注册的命令是install 可执行文件方式的command，那么，在当前目录下对应的的可执行文件名字叫 index-install.js, 如果命令是 search 即为index-search.js
       - program 匹配命令时 是自上而下执行的，会执行 所有匹配上的命令， 注意git style command配置选项 isDefault: true 时默认命令会和command 同时匹配, command 不和 arguments 不会同时匹配 但是在处理 没有注册的命令时 arguments 会和 默认命令同时匹配。
       - 命令程序多个匹配 只会发生在非链式调用中， commander 的一个链式调用 表示 一组命令，这一组命令 只会匹配一个， 只有多个链式调用之间 会存在同时匹配的情况
+  ````
 
 ### help 方法的介绍
 

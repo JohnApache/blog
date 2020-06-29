@@ -467,7 +467,7 @@ tsconfig.json 目录中存在文件表明该目录是 TypeScript 项目的根目
 - **noErrorTruncation**
   类型: Boolean
   默认值: false
-  不截断错误消息。  
+  不截断错误消息。
 
 - **noFallthroughCasesInSwitch**
   类型: Boolean

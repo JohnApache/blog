@@ -263,29 +263,31 @@ main # 全局配置，对全局生效
   | `$pid`             | 6558                       | 工作进程的 PID                                                                            |
   | `$realpath_root`   | /usr/share/html/cjw.design | 当前请求的文档根目录或别名的真实路径，会将所有符号连接转换为真实路径                      |
 
-- **客户端相关**  
-  变量名 | 结果 | 备注
-  -------- | ---- | ---
-  `$host` | cjw.design | HTTP 请求行的主机名>”HOST”请求头字段>符合请求的服务器名
-  `$hostname` | bj01 | 主机名
-  `$remote_port` | 51172 | 客户端端口
-  `$request` | GET /api/dump/path?a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84 HTTP/1.0 | 代表客户端的请求地址
-  `$request_body` | 1.11.2 | 客户端的请求主体, 此变量可在 location 中使用，将请求主体通过 proxy*pass
-  `$proxy_protocol_addr` | | 获取代理访问服务器的客户端地址，如果是直接访问，该值为空字符串(1.5.12)
-  `\$http*名称`| http_accept_language -> zh-CN,zh;q=0.9 | 匹配任意请求头字段； 变量名中的后半部分`名称`可以替换成任意请求头字段，如在配置文件中需要获取http请求头：“Accept-Language”，那么将“－”替换为下划线，大写字母替换为小写，形如：http_accept_language即可`\$bytes_sent`| 0 | 传输给客户端的字节数 (1.3.8, 1.2.5)`\$body_bytes_sent` | 0 | 传输给客户端的字节数，响应头不计算在内；这个变量和 Apache 的 mod_log_config 模块中的“%B”参数保持兼容
+- **客户端相关**
 
-* **链接相关**  
-  变量名 | 结果 | 备注
-  -------- | ---- | ---
-  `$scheme` | https | 请求使用的 Web 协议, “http” 或 “https”
-  `$uri` | /api/dump/path | 请求中的当前 URI(不带请求参数，参数位于 args)，可以不同于浏览器传递的 request*uri 的值，它可以通过内部重定向，或者使用 index 指令进行修改，/api/dump/path 不包含主机名，如”/foo/bar.html”
-  `$document_uri` | /api/dump/path | 同 uri
-  `$request_uri` | /api/dump/path?a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84 | 这个变量等于包含一些客户端请求参数的原始 URI，它无法修改，请查看/api/dump/path 更改或重写 URI，不包含主机名，例如：”/cnphp/test.php?arg=freemouse”
-  `$request_method` | GET | HTTP 请求方法，通常为“GET”或“POST”
-  `$request_time` | 0.000 | 处理客户端请求使用的时间 (1.3.9, 1.2.6); 从读取客户端的第一个字节开始计时
-  `$request_length` | 667 | 请求的长度 (包括请求的地址, http 请求头和请求主体) (1.3.12, 1.2.7)
-  `$args` | a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84 | 请求中的参数值
-  `\$arg*参数名`| arg_a => 1 | 请求中的的参数名，即“?”后面的arg_name=arg_value形式的arg_name`\$query_string`| a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84 | 同 args`\$is_args`| ? | 如果请求中有参数，值为“?”，否则为空字符串`\$https` | on | 如果开启了 SSL 安全模式，值为“on”，否则为空字符串
+  | 变量名                 | 结果                                                                  | 备注                                                                                                                                                                                                                    |
+  | ---------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `$host`                | cjw.design                                                            | HTTP 请求行的主机名>”HOST”请求头字段>符合请求的服务器名                                                                                                                                                                 |
+  | `$hostname`            | bj01                                                                  | 主机名                                                                                                                                                                                                                  |
+  | `$remote_port`         | 51172                                                                 | 客户端端口                                                                                                                                                                                                              |
+  | `$request`             | GET /api/dump/path?a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84 HTTP/1.0 | 代表客户端的请求地址                                                                                                                                                                                                    |
+  | `$request_body`        | 1.11.2                                                                | 客户端的请求主体, 此变量可在 location 中使用，将请求主体通过 proxy\*pass                                                                                                                                                |
+  | `$proxy_protocol_addr` |                                                                       | 获取代理访问服务器的客户端地址，如果是直接访问，该值为空字符串(1.5.12)                                                                                                                                                  |
+  | `\$http*名称`          | http_accept_language -> zh-CN,zh;q=0.9                                | 匹配任意请求头字段； 变量名中的后半部分`名称`可以替换成任意请求头字段，如在配置文件中需要获取 http 请求头：“Accept-Language”，那么将“－”替换为下划线，大写字母替换为小写，形如：http_accept_language 即可`\$bytes_sent` | 0 | 传输给客户端的字节数 (1.3.8, 1.2.5)`\$body_bytes_sent` | 0 | 传输给客户端的字节数，响应头不计算在内；这个变量和 Apache 的 mod_log_config 模块中的“%B”参数保持兼容 |
+
+* **链接相关**
+
+  | 变量名            | 结果                                                     | 备注                                                                                                                                                                                       |
+  | ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | `$scheme`         | https                                                    | 请求使用的 Web 协议, “http” 或 “https”                                                                                                                                                     |
+  | `$uri`            | /api/dump/path                                           | 请求中的当前 URI(不带请求参数，参数位于 args)，可以不同于浏览器传递的 request\*uri 的值，它可以通过内部重定向，或者使用 index 指令进行修改，/api/dump/path 不包含主机名，如”/foo/bar.html” |
+  | `$document_uri`   | /api/dump/path                                           | 同 uri                                                                                                                                                                                     |
+  | `$request_uri`    | /api/dump/path?a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84 | 这个变量等于包含一些客户端请求参数的原始 URI，它无法修改，请查看/api/dump/path 更改或重写 URI，不包含主机名，例如：”/cnphp/test.php?arg=freemouse”                                         |
+  | `$request_method` | GET                                                      | HTTP 请求方法，通常为“GET”或“POST”                                                                                                                                                         |
+  | `$request_time`   | 0.000                                                    | 处理客户端请求使用的时间 (1.3.9, 1.2.6); 从读取客户端的第一个字节开始计时                                                                                                                  |
+  | `$request_length` | 667                                                      | 请求的长度 (包括请求的地址, http 请求头和请求主体) (1.3.12, 1.2.7)                                                                                                                         |
+  | `$args`           | a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84                | 请求中的参数值                                                                                                                                                                             |
+  | `\$arg*参数名`    | arg_a => 1                                               | 请求中的的参数名，即“?”后面的 arg_name=arg_value 形式的 arg_name`\$query_string`                                                                                                           | a=1&%E4%B8%AD%E6%96%87=%E5%A5%BD%E7%9A%84 | 同 args`\$is_args` | ? | 如果请求中有参数，值为“?”，否则为空字符串`\$https` | on | 如果开启了 SSL 安全模式，值为“on”，否则为空字符串 |
 
 ## Location 配置前缀指令
 
