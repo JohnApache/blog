@@ -4,6 +4,7 @@
   "scripts": {
     "start": "dumi dev",
     "build": "dumi build",
+    "build:prod": "PROGRESS=none dumi build",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\""
   },
   "main": "dist/index.js",

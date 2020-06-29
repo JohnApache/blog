@@ -6,4 +6,4 @@ git clean -f
 git checkout master
 git pull
 # yarn
-yarn build
+yarn build:prod
