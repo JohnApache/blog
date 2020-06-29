@@ -587,7 +587,7 @@ http {
 
   # gzip 更多细节配置
   gzip_vary          on;
-  gzip_static        true;
+  gzip_static        on; # on | off | always;
   gzip_comp_level    6;
   gzip_buffers       16 8k;
   gzip_min_length    1000;
@@ -634,7 +634,7 @@ nginx 默认 没有 `brotli` 功能, 需要额外安装 `ngx_brotli` 模块, 我
 ```nginx
 http {
     brotli             on;
-    brotli_static       true;
+    brotli_static       on; # on | off | always;
     brotli_comp_level  6;
     # brotli_buffers       16 8k;
     brotli_min_length    20;
