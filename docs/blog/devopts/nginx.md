@@ -1079,6 +1079,14 @@ echo "----------------"
 55 23 * * * sh /root/nginx/split-log.sh >> /root/nginx/crontab.log 2>&1
 ```
 
-## 其他小技巧
+## 常见问题
 
-Todos
+### 临时处理 OCSP 域名无法访问的问题
+
+OSCP Stapling 响应报错，错误日志如下
+
+```
+OCSP responder timed out (110: Operation timed out) while requesting certificate status, responder: ocsp.int-x3.letsencrypt.org, peer: 31.13.78.66:80, certificate: "/etc/nginx/cert/cjw.design.cer"
+```
+
+参考了 这篇文章 [https://holmesian.org/letsencrypt-ocsp-fix]， 配置了 hosts 后, 的确有效果， (但是偶尔还是会发生)
