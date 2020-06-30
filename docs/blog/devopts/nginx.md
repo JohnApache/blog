@@ -1089,4 +1089,11 @@ OSCP Stapling 响应报错，错误日志如下
 OCSP responder timed out (110: Operation timed out) while requesting certificate status, responder: ocsp.int-x3.letsencrypt.org, peer: 31.13.78.66:80, certificate: "/etc/nginx/cert/cjw.design.cer"
 ```
 
-参考了 这篇文章 [https://holmesian.org/letsencrypt-ocsp-fix]， 配置了 hosts 后, 的确有效果， (但是偶尔还是会发生)
+参考了 这篇文章 [https://holmesian.org/letsencrypt-ocsp-fix]， 配置了 hosts 后, 的确有效果， (但是偶尔还是会发生)  
+在`/etc/hosts` 文件中添加
+
+```
+23.32.3.72     ocsp.int-x3.letsencrypt.org
+```
+
+如果使用的`docker` 启动 `nginx`, 还需要添加好 `volume` 映射, `nginx` 容器的 `hosts` 文件位置 也是`/etc/hosts`
