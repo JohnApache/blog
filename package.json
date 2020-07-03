@@ -3,8 +3,8 @@
   "name": "dumi-app",
   "scripts": {
     "start": "dumi dev",
-    "build": "dumi build",
-    "build:prod": "PROGRESS=none dumi build",
+    "build": "UMI_ENV=prod dumi build",
+    "build:prod": "PROGRESS=none UMI_ENV=prod dumi build",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\""
   },
   "main": "dist/index.js",
