@@ -1,7 +1,7 @@
 ---
 nav:
   title: help
-  order: 2
+  order: 3
 ---
 
 帮助中心
