@@ -1,9 +1,3 @@
----
-group:
-  title: 常规面试题
-  order: 1
----
-
 # 排序类算法
 
 ## 冒泡排序 Bubble Sort

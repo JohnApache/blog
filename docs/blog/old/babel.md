@@ -1,7 +1,7 @@
 ---
 group:
   title: 旧文档迁移
-  order: 7
+  order: 9
 ---
 
 # Babel 配置详解
