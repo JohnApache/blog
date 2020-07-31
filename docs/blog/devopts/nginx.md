@@ -506,11 +506,14 @@ server {
 
 - **主域 301 重定向**  
   你的网站可能有多个域名访问，比如：`www.cjw.design`、`cjw.design` 等，设置主域意思是不管用户输入哪个域名，都会 301 重定向到主域上，设置主域可以对 `SEO` 更友好, 比如 以 `cjw.design` 为主域名
+
   ```
   www.cjw.design => cjw.design
   www.cjw.design/list/111 => cjw.design/list/111
   ```
+
   配置如下：
+
   ```nginx
   server {
     listen 80;
@@ -522,6 +525,26 @@ server {
     }
   }
   ```
+
+- **爬虫 UA 识别并重定向**
+  网站针对 百度或者谷歌爬虫`spider` 请求重定向到其他服务，使用场景针对单页应用`SPA`网站做`SEO` 优化时，需要返回完整页面，可以利用该配置重定向爬虫请求到类似`puppeteer` 服务做`SSR`.  
+  配置如下
+
+  ```nginx
+    listen 80;
+    server_name blog.cjw.design;
+
+    location / {
+        if ($http_user_agent ~* "qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot") {
+             proxy_pass https://api.cjw.design/api/ssr/blog?pageUrl=$scheme://$host$request_uri;
+        }
+
+        index  index.html;
+        try_files $uri /index.html;
+    }
+  ```
+
+  > Tips: 请求的完整路径可以通过 nginx 内置变量拼接而成 `$scheme://$host$request_uri`;
 
 ## Nginx 跨域 设置
 
