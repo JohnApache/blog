@@ -332,6 +332,16 @@ server {
 }
 ```
 
+## 效果体验
+
+```bash
+# 普通访问
+curl https://blog.cjw.design/blog/frontend/puppeteer-ssr
+
+# 带有爬虫ua的访问
+curl -A 'Baiduspider' https://blog.cjw.design/blog/frontend/puppeteer-ssr
+```
+
 ## 总结
 
 综上是我总结的 用 `Puppeteer` 做 `SSR` 服务，后续也有可能会有其他内容的补充， `Puppeteer` 做 `SSR` 服务的性能可能比不上 直接写 服务端渲染, 但是它提供了一种新的可能性，而且最大的优势，对前端代码无任何改动，可以写作通用的 `SPA` 服务端渲染， 这个优势还是很大的
