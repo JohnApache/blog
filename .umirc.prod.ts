@@ -4,6 +4,25 @@ import BrotliPlugin from 'brotli-webpack-plugin';
 export default {
   exportStatic: {}, // 预渲染
   hash: true,
+  headScripts: [
+    // 百度统计
+    `var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1892a2f98b208487e5a1baefae81d387";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();`,
+    // 谷歌统计
+    {
+      src: 'https://www.googletagmanager.com/gtag/js?id=UA-174261313-1',
+      async: true,
+    },
+    `window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-174261313-1');`,
+  ],
   chainWebpack(config) {
     config.plugin('compression-webpack').use(CompressionPlugin, [
       {
