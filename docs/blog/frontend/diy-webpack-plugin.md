@@ -300,4 +300,27 @@ $ npm i @dking/webpack-compress-plugin --dev
 $ yarn add @dking/webpack-compress-plugin -D
 ```
 
+使用方式
+
+```js
+// webpack.config.js
+const path = require('path');
+const CompressPlugin = require('@dking/compress-webpack-plugin');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  plugins: [
+    new CompressPlugin({
+      deleteOriginalAssets: true, // 是否删除压缩前的文件，看情况配置, 默认false
+      algorithm: 'brotli', // 压缩算法，默认就是gzip
+    }),
+  ],
+};
+```
+
 > Tips: 不建议生产环境使用，该示例仅为 demo
