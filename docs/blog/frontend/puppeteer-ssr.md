@@ -162,9 +162,9 @@ const BLACK_LIST_REQUEST_URL = [
 ];
 const MAX_CACHE_TIME = 60 * 60 * 1000;
 const MAX_SSR_HTML_LOG_LENGTH = 100;
+const MAX_AUTO_RESATRT_BROWSER_TIME_NUMBER = 60 * 60 * 1000 * 2; // 自动重启浏览器时间数字格式
 
 class PuppeteerSSRService extends Service {
-  private browserWSEndpoint: string = '';
   constructor(ctx: Context) {
     super(ctx);
   }
@@ -172,6 +172,12 @@ class PuppeteerSSRService extends Service {
     const query = this.ctx.request.query;
     if (!query || !query.pageUrl || !isValidPageUrl(query.pageUrl)) {
       return '<h1>Page Not Found</h1>';
+    }
+
+    // 全局浏览器进程不存在时（可能在重启），返回错误码
+    if (!this.app.Puppeteer_Browser_Instance) {
+      this.ctx.logger.error('can not find Puppeteer_Browser_Instance');
+      return '<h1>Server Error</h1>';
     }
 
     try {
@@ -190,10 +196,13 @@ class PuppeteerSSRService extends Service {
       `puppeteerSSR:${key}:pageUrl:${pageUrl}`,
     );
     if (cacheHtml) return cacheHtml;
-    // 复用 browserWSEndpoint，减少重启
+
     const browserWSEndpoint = await this.createBrowserWSEndpoint();
     const browser = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser.newPage();
+
+    // 开启浏览器缓存
+    await page.setCacheEnabled(true);
 
     // 开启请求拦截器功能
     await page.setRequestInterception(true);
@@ -228,58 +237,59 @@ class PuppeteerSSRService extends Service {
     return html;
   }
 
-  public clearBlogCache() {
-    const { MakeSuccess, MakeError } = this.ctx;
-    try {
-      this.clearSSRCache('blog');
-      return MakeSuccess();
-    } catch (error) {
-      this.ctx.logger.error(error);
-      return MakeError(UNKNOWN_EXCEPTION);
-    }
-  }
-
-  // 清除所有SSR缓存
-  private clearSSRCache(key: string, cb?: () => void) {
-    const stream = this.app.redis.scanStream({
-      match: `puppeteerSSR:${key}:*`,
-    });
-
-    stream.on('data', (keys: string[]) => {
-      if (keys.length) {
-        const pipeline = this.app.redis.pipeline();
-        keys.forEach(key => {
-          pipeline.del(key);
-        });
-        pipeline.exec();
-      }
-    });
-
-    stream.on('end', () => {
-      this.ctx.logger.info(`clear key: ${key} SSRCache succeed.`);
-      cb && cb();
-    });
-
-    stream.on('error', error => {
-      this.ctx.logger.info(`clear key: ${key} SSRCache failed.`);
-      this.ctx.logger.error(error);
-    });
-  }
-
-  // 复用 browserWSEndpoint，减少重启
   private async createBrowserWSEndpoint() {
-    if (this.browserWSEndpoint) return this.browserWSEndpoint;
+    const cacheBrowserWSEndpoint = await this.app.redis.get(
+      `puppeteerSSR:browserWSEndpoint`,
+    );
+    if (cacheBrowserWSEndpoint) return cacheBrowserWSEndpoint;
+    const browserWSEndpoint = await this.createBrowser();
+    return browserWSEndpoint;
+  }
+
+  public async createBrowser() {
+    // 创建新的浏览器进程前，先销毁上一次的 browser 进程并重启
+    if (this.app.Puppeteer_Browser_Instance) {
+      this.app.Puppeteer_Browser_Instance.close();
+      delete this.app.Puppeteer_Browser_Instance;
+
+      // 删除 old wsEndpoint
+      await this.app.redis.del(`puppeteerSSR:browserWSEndpoint`);
+    }
+
     const browserFetcher = await puppeteer.createBrowserFetcher();
     const revisionInfo = browserFetcher.revisionInfo(
       PUPPETEER_CHROMIUM_REVISION,
     );
+
+    // 启动配置参数优化
     const browser = await puppeteer.launch({
+      headless: true,
+      devtools: false,
       executablePath: revisionInfo.executablePath,
-      args: ['--no-sandrbox', '--disable-setuid-sandbox'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage', // 创建临时文件共享内存
+        '--disable-accelerated-2d-canvas', // canvas渲染
+        '--disable-gpu', // GPU硬件加速
+        '--no-zygote', // 禁止zygote进程fork子进程
+        '--single-process', // 单进程
+      ],
     });
+
     const browserWSEndpoint = await browser.wsEndpoint();
-    this.browserWSEndpoint = browserWSEndpoint;
-    return this.browserWSEndpoint;
+    // 复用 browserWSEndpoint，减少重启
+    await this.app.redis.set(
+      `puppeteerSSR:browserWSEndpoint`,
+      browserWSEndpoint,
+      'PX',
+      MAX_CACHE_TIME,
+    );
+
+    // 全局保存最新的浏览器进程
+    this.app.Puppeteer_Browser_Instance = browser;
+
+    return browserWSEndpoint;
   }
 }
 export default PuppeteerSSRService;
@@ -307,6 +317,55 @@ import { Application } from 'egg';
 export default (app: Application) => {
   const { controller, router } = app;
   router.get('/api/ssr/blog', controller.ssr.blog);
+};
+```
+
+`schedule` 定时任务添加文件 `AutoRestartPuppeteerBrowser`
+
+> Tips： 一个 `browser` 进程长时间运行容易卡住，这里做了定时任务，每隔一段时间重启一下浏览器
+
+```ts
+import { Subscription } from 'egg';
+
+const MAX_AUTO_RESTART_BRWOSER_TIME = '2h'; // 自动重启浏览器时间
+
+class AutoRestartPuppeteerBrowser extends Subscription {
+  // 通过 schedule 属性来设置定时任务的执行间隔等配置
+  static get schedule() {
+    return {
+      interval: MAX_AUTO_RESTART_BRWOSER_TIME, // 5h间隔
+      type: 'worker', // 这里只需任意一个 worker 要执行一次即可
+    };
+  }
+
+  // subscribe 是真正定时任务执行时被运行的函数
+  async subscribe() {
+    this.ctx.logger.info('restarting puppeteer browser ...');
+    try {
+      await this.ctx.service.puppeteerSSR.createBrowser();
+      this.ctx.logger.info('restart puppeteer browser succeed!');
+    } catch (error) {
+      this.ctx.logger.error('restart puppeteer browser failed!');
+      this.ctx.logger.error(error);
+    }
+  }
+}
+
+export default AutoRestartPuppeteerBrowser;
+```
+
+`app.js`启动入口文件
+
+```ts
+import { Application } from 'egg';
+
+export default (app: Application) => {
+  app.beforeStart(async () => {
+    // 保证应用启动监听端口前数据已经准备好了
+    // 后续数据的更新由定时任务自动触发
+    // 开机先启动浏览器一波
+    await app.runSchedule('AutoRestartPuppeteerBrowser');
+  });
 };
 ```
 
@@ -341,6 +400,30 @@ curl https://blog.cjw.design/blog/frontend/puppeteer-ssr
 # 带有爬虫ua的访问
 curl -A 'Baiduspider' https://blog.cjw.design/blog/frontend/puppeteer-ssr
 ```
+
+## Linux 下 Puppeteer 的相关优化
+
+1. 添加启动配置优化参数
+   ```ts
+   // 启动配置参数优化
+   const browser = await puppeteer.launch({
+     headless: true,
+     devtools: false,
+     executablePath: revisionInfo.executablePath,
+     args: [
+       '--no-sandbox',
+       '--disable-setuid-sandbox',
+       '--disable-dev-shm-usage', // 创建临时文件共享内存
+       '--disable-accelerated-2d-canvas', // canvas渲染
+       '--disable-gpu', // GPU硬件加速
+       '--no-zygote', // 禁止zygote进程fork子进程
+       '--single-process', // 单进程
+     ],
+   });
+   ```
+2. 通过 `redis` 缓存 `browserWSEndpoint`，减少重启浏览器, 全局只启动一个浏览器进程，进程实例 `Puppeteer_Browser_Instance` 挂载在全局 `Application` 对象上，方便多个 `worker` 可以使用同一个实例
+
+3. 定时重启浏览器进程, 添加了一个定时任务 `schedule` ，定时重新创建浏览器，挂载到 全局 `Application` 上， 并关闭之前的浏览器进程
 
 ## 总结
 
