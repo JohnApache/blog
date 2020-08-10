@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "dumi-app",
+  "homepage": "https://blog.cjw.design",
   "scripts": {
     "start": "dumi dev",
     "build": "UMI_ENV=prod dumi build",
@@ -27,6 +28,7 @@
     "dumi": "^1.0.8",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
+    "umi-plugin-sitemap": "^0.1.3",
     "yorkie": "^2.0.0"
   }
 }
