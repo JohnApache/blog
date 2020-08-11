@@ -1,5 +1,9 @@
 # HTTP/3 Quic 协议实践
 
+![不会吧](../../assets/blog/devopts/http3/no.jpeg)
+
+**不会吧 不会吧，都 2020 年了，还有网站不支持 `http/3` 的?**
+
 # 本站已正式支持 HTTP/3 Quic 协议
 
 ## 前置知识简介
