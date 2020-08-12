@@ -112,9 +112,14 @@
      > Tips: 如果链接后面有引号 `"`, 参数放在引号之后，没有引号直接放最后即可
 
    - `Mac`：  
-      Mac 修改程序的启动参数较为麻烦  
+      Mac 修改程序的启动参数有两种方法
+
+     **方法 1:**  
       首先找到 `Google Chrome Canary`的包位置 , 默认位置 在 `/Applications/Google Chrome Canary.app/Contents/MacOS`  
       该目录下包含一个程序包 `Google Chrome Canary`, 我们需要做的就是创建一个脚本，然后用脚本启动这个包，并添加启动参数
+
+     > Tips: 坑！ 经实践，这样配置的脚本一开始是 ok 的，但后续不知道因为什么原因，脚本会失效，启动不了，需要重新执行一遍流程 才可以恢复，不建议使用这种方式， 建议使用 `方法2`
+
      - 进入对应文件夹
        ```bash
        cd "/Applications/Google Chrome Canary.app/Contents/MacOS"
@@ -129,10 +134,32 @@
        ```
      - 添加脚本内容, 脚本就是参数启动原始程序
        ```bash
-        #!/bin/bash
-        cd "/Applications/Google Chrome Canary.app/Contents/MacOS"
-        "/Applications/Google Chrome Canary.app/Contents/MacOS/Google.Canary.Real" --args --disable-web-security --user-data-dir --enable-quic --quic-version=h3-29
+       #!/bin/bash
+       cd "/Applications/Google Chrome Canary.app/Contents/MacOS"
+       "/Applications/Google Chrome Canary.app/Contents/MacOS/Google.Canary.Real" --args --disable-web-security --user-data-dir --enable-quic --quic-version=h3-29
        ```
+
+     **方法 2:**  
+      直接使用 `Terminal` 命令启动
+
+     ```bash
+     open "/Applications/Google Chrome Canary.app" --args --enable-quic --quic-version=h3-29
+     ```
+
+     如果希望可以双击启动，可以在桌面创建一个 `.command` 后缀的命令脚本文件
+
+     ```bash
+     vim "Google Chrome Canary.command"
+     ```
+
+     写入上面的 bash 命令
+
+     ```bash
+      #!/bin/sh
+      open "/Applications/Google Chrome Canary.app" --args --disable-web-security --user-data-dir --enable-quic --quic-version=h3-29
+     ```
+
+     这样就可以双击带参数的启动 `Chrome Canary` 了，如果有需要其他的参数也可以很方便添加
 
 应用配置，重启浏览器即可，如果有问题 浏览器搜索 `chrome://flags/`, 搜索 `Experimental QUIC protocol`, 选择 `Enabled`选项重启即可, 打开浏览器 跳转 <https://blog.cjw.design/blog/devopts/http3>，打开控制台看到 查看 `network`, 可以查看所有资源的请求详情，类似内容如下
 [![image](../../assets/blog/devopts/http3/h3-29.png)](https://blog.cjw.design/blog/devopts/http3)， 此时可以查看到很多资源使用的 `h3-29` 协议请求内容
