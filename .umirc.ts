@@ -20,7 +20,7 @@ export default {
   ],
   ...defineConfig({
     mode: 'site',
-    title: 'JohnApache 的前端日志',
+    title: `JohnApache`,
     dynamicImport: {
       // loading: ''
     }, // 启用按需加载
