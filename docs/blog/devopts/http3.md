@@ -156,10 +156,17 @@
 
      ```bash
       #!/bin/sh
-      open "/Applications/Google Chrome Canary.app" --args --disable-web-security --user-data-dir --enable-quic --quic-version=h3-29
+      open "/Applications/Google Chrome Canary.app" --args --enable-quic --quic-version=h3-29
      ```
 
-     这样就可以双击带参数的启动 `Chrome Canary` 了，如果有需要其他的参数也可以很方便添加
+     > Tips: 如果还希望浏览器可以支持跨域，并忽略其他安全校验，可以添加额外参数 `--disable-web-security --user-data-dir=/Users/你的用户名/MyChromeDevUserData/`, 其中`--user-data-dir`后面的值需要把 `你的用户名` 换成对应的名称, 示例如下
+
+   ```bash
+     #!/bin/sh
+     open "/Applications/Google Chrome Canary.app" --args --disable-web-security --user-data-dir=/Users/cjw/MyChromeDevUserData/ --enable-quic --quic-version=h3-29
+   ```
+
+   这样就可以双击带参数的启动 `Chrome Canary` 了，如果有需要其他的参数也可以很方便添加
 
 应用配置，重启浏览器即可，如果有问题 浏览器搜索 `chrome://flags/`, 搜索 `Experimental QUIC protocol`, 选择 `Enabled`选项重启即可, 打开浏览器 跳转 <https://blog.cjw.design/blog/devopts/http3>，打开控制台看到 查看 `network`, 可以查看所有资源的请求详情，类似内容如下
 [![image](../../assets/blog/devopts/http3/h3-29.png)](https://blog.cjw.design/blog/devopts/http3)， 此时可以查看到很多资源使用的 `h3-29` 协议请求内容
